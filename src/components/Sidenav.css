@@ -1,0 +1,29 @@
+.sidenav {
+    width: 200px;
+    height: 100vh;
+    background-color: #224957;
+    padding-top: 28px;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    position: fixed;
+}
+
+.sideitem {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+}
+
+.linkText {
+    padding-left: 16px;
+    color: white;
+}
+
+.sideitem:hover {
+    background-color: #20df7f;
+    color:white;
+}

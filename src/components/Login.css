@@ -1,0 +1,82 @@
+.Login{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #e5e5e5;
+}
+
+.formLogin{
+    font-size: 1.5em;
+    font-weight: 600;
+    font-family: Lexend Deca, sans-serif;
+    color: #224957;
+}
+
+.usernameInput{
+    text-align: center;
+    width: 300px;
+    height: 45px;
+    background-color: #224957;
+    border-radius: 15px;
+    border: none;
+    color: white;
+}
+
+.usernameInput:focus{
+    outline: none;
+    background-color: #224957;
+    color: white;
+    font-family: Lexend Deca, sans-serif;
+}
+
+h1{
+    font-size: 4em;
+    font-weight: 600;
+    font-family: Lexend Deca, sans-serif;
+    color: #224957;
+}
+
+p{
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1.7px;
+    font-family: Lexend Deca, sans-serif;
+    color: #224957;
+}
+
+.loginButton{
+    margin-top: 10%;
+    width: 300px;
+    height: 45px;
+    background-color: #20df7f;
+    border-radius: 15px;
+    color: #224957;
+    border: none;
+    font-family: Lexend Deca, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: 2px 5px #224957;
+}
+
+.loginButton:disabled{
+    background-color: #20df7f;
+    color: #224957;
+}
+
+.loginButton:hover{
+    background-color: #20df7f;
+    color: #224957;
+}
+
+.loginButton:focus{
+    outline: none;
+    background-color: #20df7f;
+    color: #224957;
+}
+
+.loginFooter{
+    margin-top: 10%;
+}
