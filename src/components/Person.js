@@ -1,10 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Sidenav from "./Sidenav";
-import Button from "@material-ui/core/Button";
+import { Button, TextField } from "@mui/material";
 import "./Person.css";
 import { Add, AllInbox, Delete, Edit, ShowChart } from "@mui/icons-material";
 import Form from "react-bootstrap/Form"
+import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 const url = "http://localhost:8000/api/person";
 
 const buttonStyle= {
@@ -33,18 +34,17 @@ export default function PersonPage() {
     const [quantity, setQuantity] = useState("");
     const [cnp, setCnp] = useState("");
     const [showResults, setShowResults] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [fullname, setFullname] = useState("");
+    const [date, setDate] = useState(new Date());
+    const [quantityReceipt, setQuantityReceipt] = useState(0);
+    const [person_id, setPerson_id] = useState(0);
 
     var page = 0;
     var no_per_page = 10;
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("first_name: ", first_name);
-        console.log("last_name: ", last_name);
-        console.log("phone: ", phone);
-        console.log("area: ", area);
-        console.log("quantity: ", quantity);
-        console.log("cnp: ", cnp);
         fetch(url + "/add", {
             headers: {
                 Accept: "application/json",
@@ -92,6 +92,34 @@ export default function PersonPage() {
         fetchPersons()
     }, [])
 
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    }
+
+    const handleDialogOpen = (person) => {
+        setFullname(person.first_name + " " + person.last_name);
+        setPerson_id(person.person_id);
+        setOpenDialog(true);
+    }
+
+    const handleDialogAdd = () => {
+        fetch(url + "/add_receipt", {
+            headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "name": fullname,
+                "date": date,
+                "amount": quantityReceipt,
+                "person_id": person_id
+            }),
+            method: "POST"
+        });
+        setOpenDialog(false);
+    }
+ 
     return (
         <div className="PersonsPage">
             <Sidenav/>
@@ -172,7 +200,7 @@ export default function PersonPage() {
                                     <p>Remained quantity: {(parseFloat(person.area) * parseFloat(person.quantity)).toFixed(2)} kg</p>
                                     <p>Phone: {person.phone}</p>
                                     <div className="receiptButtons">
-                                        <Button startIcon={<Add/>} variant="contained" style={buttonStyle}>New receipt</Button>
+                                        <Button startIcon={<Add/>} variant="contained" style={buttonStyle} onClick={() => handleDialogOpen(person)}>New receipt</Button>
                                         <Button startIcon={<AllInbox/>} variant="contained" style={buttonStyle}>All receipts</Button>
                                     </div>
                                 </div>
@@ -185,6 +213,46 @@ export default function PersonPage() {
                         ))
                     }
                 </div>
+
+                <Dialog open={openDialog} onClose={handleDialogClose}>
+                    <DialogTitle>Add new receipt</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            value={fullname}
+                            label="Full name"
+                            type="text"
+                            fullWidth
+                            onChange={(e) => setFullname(e.target.value)}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="quantity"
+                            label="Quantity"
+                            type="number"
+                            value={quantityReceipt}
+                            fullWidth
+                            onChange={(e) => setQuantityReceipt(e.target.value)}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="date"   
+                            label="Date"
+                            type="date"
+                            value={date}
+                            fullWidth
+                            onChange={(e) => setDate(e.target.value)}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleDialogClose} style={buttonStyle}>Cancel</Button>
+                        <Button onClick={handleDialogAdd} style={buttonStyle}>Add</Button>
+                    </DialogActions>
+                </Dialog>
             </main>
         </div>
     );

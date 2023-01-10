@@ -50,7 +50,6 @@ export default function Login() {
 
   return (
     <div className="Login">
-      <br></br><br></br><br></br><br></br>
       <h1>Sign in</h1>
       <br></br>
       <p>Sign in and start managing your farm!</p>
