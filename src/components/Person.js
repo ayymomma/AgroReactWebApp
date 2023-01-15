@@ -1,9 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Sidenav from "./Sidenav";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Pagination, PaginationItem, Stack } from "@mui/material";
 import "./Person.css";
-import { Add, AllInbox, Delete, Edit, ShowChart } from "@mui/icons-material";
+import { Add, AllInbox, Delete, Edit, ShowChart, ArrowBack, ArrowForward } from "@mui/icons-material";
 import Form from "react-bootstrap/Form"
 import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 const url = "http://localhost:8000/api/person";
@@ -39,9 +39,10 @@ export default function PersonPage() {
     const [date, setDate] = useState(new Date());
     const [quantityReceipt, setQuantityReceipt] = useState(0);
     const [person_id, setPerson_id] = useState(0);
+    const [pages, setPages] = useState(0);
+    const [current_page, setCurrentPage] = useState(0);
 
-    var page = 0;
-    var no_per_page = 10;
+    var no_per_page = 5;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -76,7 +77,7 @@ export default function PersonPage() {
     }
     
     const fetchPersons = () => {
-        fetch(url + "/get/" + page + "/" + no_per_page,{
+        fetch(url + "/get/" + current_page + "/" + no_per_page,{
             method: "GET",
             headers: {
                 Accept: "application/json",
@@ -88,9 +89,29 @@ export default function PersonPage() {
             setPersons(data);
         });
     }
+
+    function fetchPages(){
+        fetch(url + "/get_no_pages/" + no_per_page,
+        {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            }
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            setPages(data.pages);
+        });
+    }
+    
+    useEffect(() => {
+        fetchPages()
+    }, [])
+
     useEffect(() => {
         fetchPersons()
-    }, [])
+    }, [current_page])
 
     const handleDialogClose = () => {
         setOpenDialog(false);
@@ -213,6 +234,20 @@ export default function PersonPage() {
                         ))
                     }
                 </div>
+
+                <Stack spacing={2} alignItems="center">
+                    <Pagination
+                        count={pages}
+                        color="primary"
+                        renderItem={(item) => (
+                            <PaginationItem
+                            slots={{ previous: ArrowBack, next: ArrowForward }}
+                            {...item}
+                            />
+                        )}
+                        onChange={(event, number) => setCurrentPage(number-1)}
+                    />
+                </Stack>
 
                 <Dialog open={openDialog} onClose={handleDialogClose}>
                     <DialogTitle>Add new receipt</DialogTitle>
