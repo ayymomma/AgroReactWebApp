@@ -177,7 +177,24 @@ export default function PersonPage() {
         });
         setOpenViewReceiptDialog(true);
     }
- 
+
+    const handleDeletePerson = (person) => {
+        fetch(url + "/delete/" + person.person_id,{
+            method: "DELETE",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            }
+        }).then((res) => res.json())
+        .then((data) => {
+            if(data.message === "Person deleted"){
+                alert("Person deleted successfully!");
+                fetchPersons();
+            }
+        });
+    }
+
     return (
         <div className="PersonsPage">
             <Sidenav/>
@@ -265,7 +282,7 @@ export default function PersonPage() {
                                 </div>
                                 <div className="personButtons">
                                         <Button startIcon={<Edit/>} variant="contained" style={buttonStyle}>Edit</Button>
-                                        <Button startIcon={<Delete/>} variant="contained" style={buttonStyle}>Delete</Button>
+                                        <Button startIcon={<Delete/>} variant="contained" style={buttonStyle} onClick={() => handleDeletePerson(person)}>Delete</Button>
                                         <Button startIcon={<ShowChart/>} variant="contained" style={buttonStyle}>Show </Button>
                                 </div>
                             </div>
