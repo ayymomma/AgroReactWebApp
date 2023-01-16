@@ -87,4 +87,15 @@ h1{
     padding: 10px;
     justify-content: center;
 }
+.receipts {
+    display: flex;
+    flex-direction: row;
+}
 
+.receiptData {
+    background-color: #224957;
+    opacity: 80%;
+    margin: 10px;
+    box-shadow: 0 4px 4px 0 #090b0b;
+    border-radius: 10px;
+}

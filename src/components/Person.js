@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Sidenav from "./Sidenav";
-import { Button, TextField, Pagination, PaginationItem, Stack } from "@mui/material";
+import { Button, TextField, Pagination, PaginationItem, Stack} from "@mui/material";
 import "./Person.css";
 import { Add, AllInbox, Delete, Edit, ShowChart, ArrowBack, ArrowForward } from "@mui/icons-material";
 import Form from "react-bootstrap/Form"
@@ -25,6 +25,19 @@ const buttonStyle= {
     boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)",
 }
 
+const buttonStyleReceipts= {
+    backgroundColor: "#20df7f",
+    border: "none",
+    color: "white",
+    fontFamily: "Lexend Deca, sans-serif",
+    textAlign: "center",
+    textDecoration: "none",
+    fontSize: "10px",
+    margin:"10px",
+    fontWeight: 600,
+    boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)"
+}
+
 export default function PersonPage() {
     const [persons, setPersons] = useState([]);
     const [first_name, setFirst_name] = useState("");
@@ -34,13 +47,16 @@ export default function PersonPage() {
     const [quantity, setQuantity] = useState("");
     const [cnp, setCnp] = useState("");
     const [showResults, setShowResults] = useState(false);
-    const [openDialog, setOpenDialog] = useState(false);
+    const [openNewReceiptDialog, setOpenNewReceiptDialog] = useState(false);
+    const [openViewReceiptDialog, setOpenViewReceiptDialog] = useState(false);
     const [fullname, setFullname] = useState("");
     const [date, setDate] = useState(new Date());
     const [quantityReceipt, setQuantityReceipt] = useState(0);
     const [person_id, setPerson_id] = useState(0);
     const [pages, setPages] = useState(0);
     const [current_page, setCurrentPage] = useState(0);
+    const [receipts, setReceipts] = useState([]);
+    const [current_year, setCurrentYear] = useState(new Date().getFullYear());
 
     var no_per_page = 5;
 
@@ -114,13 +130,13 @@ export default function PersonPage() {
     }, [current_page])
 
     const handleDialogClose = () => {
-        setOpenDialog(false);
+        setOpenNewReceiptDialog(false);
     }
 
     const handleDialogOpen = (person) => {
         setFullname(person.first_name + " " + person.last_name);
         setPerson_id(person.person_id);
-        setOpenDialog(true);
+        setOpenNewReceiptDialog(true);
     }
 
     const handleDialogAdd = () => {
@@ -138,7 +154,28 @@ export default function PersonPage() {
             }),
             method: "POST"
         });
-        setOpenDialog(false);
+        setOpenNewReceiptDialog(false);
+    }
+
+    const handleViewReceiptsClose = () => {
+        setOpenViewReceiptDialog(false);
+    }
+
+    const handleViewReceiptsOpen = (person) => {
+        fetch(url + "/get_receipt/" + person.person_id + "/" + current_year,{
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+            }
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            setReceipts(data);
+            console.log(data);
+        });
+        setOpenViewReceiptDialog(true);
     }
  
     return (
@@ -218,11 +255,12 @@ export default function PersonPage() {
                                 <div className="personData">
                                     <p>{person.first_name + " " + person.last_name}</p>
                                     <p>Area: {person.area} ha</p>
-                                    <p>Remained quantity: {(parseFloat(person.area) * parseFloat(person.quantity)).toFixed(2)} kg</p>
+                                    {/*TODO add quantity */}
+                                    <p>Remained quantity: TODO</p>
                                     <p>Phone: {person.phone}</p>
                                     <div className="receiptButtons">
                                         <Button startIcon={<Add/>} variant="contained" style={buttonStyle} onClick={() => handleDialogOpen(person)}>New receipt</Button>
-                                        <Button startIcon={<AllInbox/>} variant="contained" style={buttonStyle}>All receipts</Button>
+                                        <Button startIcon={<AllInbox/>} variant="contained" style={buttonStyle} onClick={() => handleViewReceiptsOpen(person)}>All receipts</Button>
                                     </div>
                                 </div>
                                 <div className="personButtons">
@@ -249,7 +287,7 @@ export default function PersonPage() {
                     />
                 </Stack>
 
-                <Dialog open={openDialog} onClose={handleDialogClose}>
+                <Dialog open={openNewReceiptDialog} onClose={handleDialogClose}>
                     <DialogTitle>Add new receipt</DialogTitle>
                     <DialogContent>
                         <TextField
@@ -287,6 +325,27 @@ export default function PersonPage() {
                         <Button onClick={handleDialogClose} style={buttonStyle}>Cancel</Button>
                         <Button onClick={handleDialogAdd} style={buttonStyle}>Add</Button>
                     </DialogActions>
+                </Dialog>
+                
+                <Dialog open={openViewReceiptDialog} onClose={handleViewReceiptsClose}>
+                    <DialogTitle textAlign="center">Receipts</DialogTitle>  
+                    <DialogContent>
+                        <div className="container">
+                            {
+                                receipts.map((receipt) => (
+                                    <div key={receipt.receipt_id} className="receipts">
+                                        <div className="receiptData">
+                                            <p>{receipt.name}</p>
+                                            <p>Quantity: {receipt.amount}</p>
+                                            <p>Date: {receipt.date}</p>
+                                            <Button startIcon={<Edit/>} variant="contained" style={buttonStyleReceipts}>Edit</Button>
+                                            <Button startIcon={<Delete/>} variant="contained" style={buttonStyleReceipts}>Delete</Button>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </DialogContent>
                 </Dialog>
             </main>
         </div>
