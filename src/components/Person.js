@@ -198,7 +198,7 @@ export default function PersonPage() {
     return (
         <div className="PersonsPage">
             <Sidenav/>
-            <main>
+            <main className="personMain">
                 <Button startIcon={<Add/>} variant="contained" style={buttonStyle} onClick={onClick}>Add new person</Button>
 
                 { showResults ? <Form onSubmit={handleSubmit} className = "formAdd">
@@ -346,6 +346,7 @@ export default function PersonPage() {
                 
                 <Dialog open={openViewReceiptDialog} onClose={handleViewReceiptsClose}>
                     <DialogTitle textAlign="center">Receipts</DialogTitle>  
+                    
                     <DialogContent>
                         <div className="container">
                             {

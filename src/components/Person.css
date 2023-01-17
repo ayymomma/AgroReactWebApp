@@ -4,9 +4,10 @@ body {
 }
 .PersonsPage {
     display: flex;
+    background-color: #d2d6d4;
 }
 
-main {
+.personMain {
     padding: 10px;
     margin-left: 200px;
 }
