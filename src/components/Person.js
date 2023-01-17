@@ -102,7 +102,8 @@ export default function PersonPage() {
         })
         .then((res) => res.json())
         .then((data) => {
-            setPersons(data);
+            if(data.length > 0)
+                setPersons(data);
         });
     }
 
