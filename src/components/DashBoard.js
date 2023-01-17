@@ -9,6 +9,8 @@ const url = 'http://localhost:8000/api';
 export default function DashBoard() {
     const [totalArea, setTotalArea] = React.useState(0);
     const [totalReceipt, setTotalReceipt] = React.useState(0);
+    const [totalTenants, setTotalTenants] = React.useState(0);
+    const [totalYearArea, setTotalYearArea] = React.useState(0);
 
     const fetchDashboardData = () => {
         fetch(url + "/person/get_all_area", {
@@ -34,6 +36,20 @@ export default function DashBoard() {
         .then((data) => {
             setTotalReceipt(data.amount);
         })
+
+        fetch(url + "/person/get_persons_and_amount", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            }
+        }).then((res) => res.json())
+        .then((val) => {
+            setTotalTenants(val.persons);
+            setTotalYearArea(val.amount);
+        })
+
     }
 
     useEffect(() => {
@@ -52,8 +68,8 @@ export default function DashBoard() {
                     <Grid container spacing={2} columns={12}>
                         <MyCard value={totalArea + "ha"} title="Total area" description="All time area" image="https://static-00.iconduck.com/assets.00/results-icon-256x256-cb2c2kkw.png"/>
                         <MyCard value={totalReceipt + "kg"} title="Lease amount given" description="This year" image="https://static-00.iconduck.com/assets.00/results-icon-256x256-cb2c2kkw.png"/>
-                        <MyCard value="10" title="New tenants" description="This year" image="https://static-00.iconduck.com/assets.00/results-icon-256x256-cb2c2kkw.png"/>
-                        <MyCard value="12.1ha" title="New area" description="This year" image="https://static-00.iconduck.com/assets.00/results-icon-256x256-cb2c2kkw.png"/>
+                        <MyCard value={totalTenants} title="New tenants" description="This year" image="https://static-00.iconduck.com/assets.00/results-icon-256x256-cb2c2kkw.png"/>
+                        <MyCard value={totalYearArea + "ha"} title="New area" description="This year" image="https://static-00.iconduck.com/assets.00/results-icon-256x256-cb2c2kkw.png"/>
                     </Grid>
                 </Box>
             </main>
