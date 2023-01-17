@@ -4,6 +4,7 @@ import "./DashBoard.css";
 import { Grid, Box } from '@mui/material';
 import MyCard from '../lib/MyCard';
 import { useEffect } from 'react';
+import LogTable from '../lib/LogTable';
 const url = 'http://localhost:8000/api';
 
 export default function DashBoard() {
@@ -61,7 +62,8 @@ export default function DashBoard() {
             <Sidenav/>
             <div className='dashboardText'>
                     <h1>Dashboard</h1>
-                    <h1>Log out</h1>
+                    {/* add a href for log out */}
+                    <a onClick={() => {localStorage.removeItem('token'); localStorage.removeItem('username')}} href="/login">Log out</a>
                 </div>
             <main className='dashboard'>
                 <Box sx={{ flexGrow: 1 }}>
@@ -72,6 +74,7 @@ export default function DashBoard() {
                         <MyCard value={totalYearArea + "ha"} title="New area" description="This year" image="https://static-00.iconduck.com/assets.00/results-icon-256x256-cb2c2kkw.png"/>
                     </Grid>
                 </Box>
+                <LogTable/>
             </main>
         </div>
     )

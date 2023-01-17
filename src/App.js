@@ -5,6 +5,8 @@ import Login from "./components/Login"
 import HomePage from "./components/HomePage"
 import Person from "./components/Person"
 import DashBoard from "./components/DashBoard"
+import Contracts from "./components/Contracts"
+import Fields from "./components/Fields"
 
 function App() {
   const token = localStorage.getItem("token");
@@ -18,8 +20,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/dashboard" element={<DashBoard/>}/>
         <Route path="/persons" element={<Person/>} />
-        <Route path="/contracts" />
-        <Route path="/fields" />
+        <Route path="/contracts" element={<Contracts/>} />
+        <Route path="/fields" element={<Fields/>}/>
       </Routes>
     </BrowserRouter>
   )
