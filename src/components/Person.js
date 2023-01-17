@@ -104,6 +104,8 @@ export default function PersonPage() {
         .then((data) => {
             if(data.length > 0)
                 setPersons(data);
+            else
+                setPersons([]);
         });
     }
 
