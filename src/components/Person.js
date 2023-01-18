@@ -233,7 +233,7 @@ export default function PersonPage() {
                         <Form.Label>Phone</Form.Label>
                         <Form.Control
                             autoFocus
-                            type="text"
+                            type="number"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                         />
@@ -243,7 +243,7 @@ export default function PersonPage() {
                         <Form.Label>Area</Form.Label>
                         <Form.Control
                             autoFocus
-                            type="text"
+                            type="number"
                             value={area}
                             onChange={(e) => setArea(e.target.value)}
                         />
@@ -253,7 +253,7 @@ export default function PersonPage() {
                         <Form.Label>Quantity</Form.Label>
                         <Form.Control
                             autoFocus
-                            type="text"
+                            type="number"
                             value={quantity}
                             onChange={(e) => setQuantity(e.target.value)}
                         />
@@ -263,7 +263,7 @@ export default function PersonPage() {
                         <Form.Label>CNP</Form.Label>
                         <Form.Control
                             autoFocus
-                            type="text"
+                            type="number"
                             value={cnp}
                             onChange={(e) => setCnp(e.target.value)}
                         />
