@@ -49,6 +49,7 @@ export default function PersonPage() {
     const [showResults, setShowResults] = useState(false);
     const [openNewReceiptDialog, setOpenNewReceiptDialog] = useState(false);
     const [openViewReceiptDialog, setOpenViewReceiptDialog] = useState(false);
+    const [openEditPersonDialog, setOpenEditPersonDialog] = useState(false);
     const [fullname, setFullname] = useState("");
     const [date, setDate] = useState(new Date());
     const [quantityReceipt, setQuantityReceipt] = useState(0);
@@ -198,6 +199,49 @@ export default function PersonPage() {
         });
     }
 
+    const handleEditPerson = (person) => {
+        setPerson_id(person.person_id);
+        setFirst_name(person.first_name);
+        setLast_name(person.last_name);
+        setPhone(person.phone);
+        setArea(person.area);
+        setQuantity(person.quantity);
+        setCnp(person.cnp);
+        setOpenEditPersonDialog(true);
+    }
+    
+    const handleEditButtonDialogClose = () => {
+        setOpenEditPersonDialog(false);
+        fetch(url + "/edit_person", {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token")
+            },
+            body: JSON.stringify({
+                person_id,
+                first_name,
+                last_name,
+                phone,
+                area,
+                quantity,
+                cnp
+            }),
+            method: "PUT"
+        }).then((res) => res.json())
+        .then((data) => {
+            if(data.message === "success"){
+                alert("Person edited successfully!");
+                fetchPersons();
+            }
+            else{
+                alert("Error editing person!");
+            }
+        }
+        );
+
+    }
+
     return (
         <div className="PersonsPage">
             <Sidenav/>
@@ -288,7 +332,7 @@ export default function PersonPage() {
                                     </div>
                                 </div>
                                 <div className="personButtons">
-                                        <Button startIcon={<Edit/>} variant="contained" style={buttonStyle}>Edit</Button>
+                                        <Button startIcon={<Edit/>} variant="contained" style={buttonStyle} onClick={() => handleEditPerson(person)}>Edit</Button>
                                         <Button startIcon={<Delete/>} variant="contained" style={buttonStyle} onClick={() => handleDeletePerson(person)}>Delete</Button>
                                         <Button startIcon={<ShowChart/>} variant="contained" style={buttonStyle}>Show </Button>
                                 </div>
@@ -351,6 +395,66 @@ export default function PersonPage() {
                     </DialogActions>
                 </Dialog>
                 
+                <Dialog open={openEditPersonDialog} onClose={() => {setOpenEditPersonDialog(false)}}>
+                    <DialogTitle>Edit person</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="first_name"
+                            value={first_name}
+                            label="First name"
+                            type="text"
+                            fullWidth
+                            onChange={(e) => setFirst_name(e.target.value)}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="last_name"
+                            value={last_name}
+                            label="Last name"
+                            type="text"
+                            fullWidth
+                            onChange={(e) => setLast_name(e.target.value)}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="area"
+                            value={area}
+                            label="Area"
+                            type="number"
+                            fullWidth
+                            onChange={(e) => setArea(e.target.value)}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="phone"
+                            value={phone}
+                            label="Phone"
+                            type="number"
+                            fullWidth
+                            onChange={(e) => setPhone(e.target.value)}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="cnp"
+                            value={cnp}
+                            label="CNP"
+                            type="number"
+                            fullWidth
+                            onChange={(e) => setCnp(e.target.value)}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => {setOpenEditPersonDialog(false)}} style={buttonStyle}>Cancel</Button>
+                        <Button onClick={handleEditButtonDialogClose} style={buttonStyle}>Edit</Button>
+                    </DialogActions>
+                </Dialog>
+            
                 <Dialog open={openViewReceiptDialog} onClose={handleViewReceiptsClose}>
                     <DialogTitle textAlign="center">Receipts</DialogTitle>  
                     
