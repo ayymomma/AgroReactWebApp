@@ -1,8 +1,27 @@
-.contracts {
-    margin-left: 200px;
+body {
+    margin: 0;
+    padding: 0;
+}
+.contractsPage {
+    display: flex;
+    flex-direction: column;
 }
 
-.contracts h1{
+main {
+    padding: 10px;
+}
+
+.contractText{
+    margin-left: 200px;
+    background-color: white;
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-shadow: 0 2px 2px 0 #d7d6d6;
+}
+
+.contractText h1,a{
     margin: 0;
     padding: 10px;
     color: #224957;
