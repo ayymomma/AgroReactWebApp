@@ -201,6 +201,11 @@ export default function PersonPage() {
     return (
         <div className="PersonsPage">
             <Sidenav/>
+            <div className='personsText'>
+                    <h1>Person</h1>
+                    {/* add a href for log out */}
+                    <a onClick={() => {localStorage.removeItem('token'); localStorage.removeItem('username')}} href="/login">Log out</a>
+            </div>
             <main className="personMain">
                 <Button startIcon={<Add/>} variant="contained" style={buttonStyle} onClick={onClick}>Add new person</Button>
 
