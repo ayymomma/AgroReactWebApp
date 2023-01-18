@@ -1,5 +1,6 @@
 import React from 'react';
 import Sidenav from './Sidenav';
+import './Contracts.css';
 
 export default function Contracts() {
     return (
