@@ -4,8 +4,25 @@ body {
 }
 .HomePage {
     display: flex;
+    flex-direction: column;
 }
 
 main {
     padding: 10px;
+}
+
+.homeText{
+    margin-left: 200px;
+    background-color: white;
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-shadow: 0 2px 2px 0 #d7d6d6;
+}
+
+.homeText h1,a{
+    margin: 0;
+    padding: 10px;
+    color: #224957;
 }

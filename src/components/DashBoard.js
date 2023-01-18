@@ -64,7 +64,7 @@ export default function DashBoard() {
                     <h1>Dashboard</h1>
                     {/* add a href for log out */}
                     <a onClick={() => {localStorage.removeItem('token'); localStorage.removeItem('username')}} href="/login">Log out</a>
-                </div>
+            </div>
             <main className='dashboard'>
                 <Box sx={{ flexGrow: 1 }}>
                     <Grid container spacing={2} columns={12}>
